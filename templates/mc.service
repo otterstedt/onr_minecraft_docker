@@ -1,0 +1,18 @@
+[Unit]
+Description=Minecraft Server Docker
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStart=/usr/bin/docker run -v /home/{{ ansible_user_id }}/opt/mc/data:/data -e EULA=TRUE -p 25565:25565 itzg/minecraft-server
+#ExecStop=/usr/bin/docker stop minec ; /usr/bin/docker rm minec
+#ExecReload=/usr/bin/docker restart minec
+User={{ ansible_user_id }}
+Group=docker
+Environment=PATH=/bin:/usr/bin:/usr/local/bin:$PATH
+WorkingDirectory=/home/{{ ansible_user_id }}
+TimeoutSec=600
+
+[Install]
+Alias=mc.service
+WantedBy=multi-user.target

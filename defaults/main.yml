@@ -1,0 +1,5 @@
+---
+# defaults file for onr_minecraft_docker
+onr_minecraft_docker_motd: Otternet Minecraft Server
+onr_minecraft_docker_enforce_whitelist: 'true'
+onr_minecraft_docker_whitelist_users: "{{ vault_onr_minecraft_docker_whitelist_users | default([]) }}"

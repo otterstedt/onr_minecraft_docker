@@ -1,0 +1,10 @@
+[
+{% for user in onr_minecraft_docker_whitelist_users %}
+    {
+      "uuid": "{{ user.uuid }}",
+      "name": "{{ user.name }}"
+    }
+{% endfor %}
+
+]
+  
