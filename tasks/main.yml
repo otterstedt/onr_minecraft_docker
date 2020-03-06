@@ -1,2 +1,35 @@
 ---
 # tasks file for onr_minecraft_docker
+- name: Ensure required folders exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: 
+    - "{{ onr_minecraft_docker_systemd_folder }}"
+    - "{{ onr_minecraft_docker_data_folder }}"
+
+- name: Upload Minecraft Server Files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - src: mc.service
+      dest: "{{ onr_minecraft_docker_systemd_folder }}/mc.service"
+    - src: server.properties
+      dest: /home/{{ ansible_user_id }}/opt/mc/data/server.properties
+    - src: whitelist.json.j2
+      dest: /home/{{ ansible_user_id }}/opt/mc/data/whitelist.json
+
+- name: Enable Minecraft service
+  shell: systemctl enable {{ onr_minecraft_docker_systemd_folder }}/mc.service
+  args:
+    chdir: "{{ onr_minecraft_docker_systemd_folder }}"
+  become: yes
+
+- name: Enable and start Minecraft Service
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+    name: mc.service
+  become: yes
